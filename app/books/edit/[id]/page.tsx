@@ -36,7 +36,7 @@ export default function EditBookPage() {
   }, [id]);
 
   const handleSubmit = async (values: BookFormValues) => {
-    await updateBook(id, values.title, values.authorId);
+    await updateBook(id, values.title.trim(), values.authorId);
     router.push('/books');
 
     toast.success(`Book(${values.title}) is updated`);

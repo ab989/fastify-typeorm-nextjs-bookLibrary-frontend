@@ -10,7 +10,7 @@ export default function NewAuthorPage() {
   const router = useRouter();
 
   const handleSubmit = async (values: AuthorFormValues) => {
-    await createAuthor(values.name);
+    await createAuthor(values.name.trim());
     router.push('/authors');
 
     toast.success(`Author(${values.name}) is created`);

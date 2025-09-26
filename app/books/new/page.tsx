@@ -22,7 +22,7 @@ export default function NewBookPage() {
   }, []);
 
   const handleSubmit = async (values: BookFormValues) => {
-    await createBook(values.title, values.authorId);
+    await createBook(values.title.trim(), values.authorId);
     router.push('/books');
 
     toast.success(`Book(${values.title}) is created`);

@@ -24,7 +24,7 @@ export default function EditAuthorPage() {
   }, [id]);
 
   const handleSubmit = async (values: AuthorFormValues) => {
-    await updateAuthor(id, values.name);
+    await updateAuthor(id, values.name.trim());
     router.push('/authors');
 
     toast.success(`Author(${values.name}) is updated`);
