@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import toast from "react-hot-toast"
+
 import { getAuthor, updateAuthor } from '@/services/authorService';
 import { useRouter, useParams } from 'next/navigation';
 import AuthorForm, { AuthorFormValues } from '@/components/forms/AuthorForm';
@@ -24,6 +26,8 @@ export default function EditAuthorPage() {
   const handleSubmit = async (values: AuthorFormValues) => {
     await updateAuthor(id, values.name);
     router.push('/authors');
+
+    toast.success(`Author(${values.name}) is updated`);
   };
 
   return (

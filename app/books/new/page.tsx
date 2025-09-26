@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import toast from "react-hot-toast"
+
 import { createBook } from '@/services/bookService';
 import { getAuthors } from '@/services/authorService';
 import { useRouter } from 'next/navigation';
@@ -22,6 +24,8 @@ export default function NewBookPage() {
   const handleSubmit = async (values: BookFormValues) => {
     await createBook(values.title, values.authorId);
     router.push('/books');
+
+    toast.success(`Book(${values.title}) is created`);
   };
 
   return (

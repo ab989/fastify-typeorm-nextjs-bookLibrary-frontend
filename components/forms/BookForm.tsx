@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, FormEvent, useEffect } from "react";
 import { Author } from '@/types/Author'
 

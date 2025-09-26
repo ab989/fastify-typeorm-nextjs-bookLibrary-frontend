@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
+import toast from "react-hot-toast"
 
 import { Author } from '@/types/Author';
 import { getAuthors, deleteAuthor } from '@/services/authorService';
@@ -10,7 +11,7 @@ import ConfirmDialog from '@/components/modal/ConfirmDialog';
 export default function AuthorsPage() {
   const [authors, setAuthors] = useState<Author[]>([]);
   const [open, setOpen] = useState(false);
-  const [selectedAuthorId, setSelectedAuthorId] = useState('');
+  const [selectedAuthor, setSelectedAuthor] = useState<Author>();
   const confirmRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
@@ -21,16 +22,17 @@ export default function AuthorsPage() {
     fetchAuthors();
   }, []);
 
-  const handleDelete = (id: string) => {
-    setSelectedAuthorId(id);
+  const handleDelete = (author: Author) => {
+    setSelectedAuthor(author);
     setOpen(true);
   };
 
   const confirmDelete = async () => {
-    await deleteAuthor(selectedAuthorId);
-    setAuthors(authors.filter((author) => author.id !== selectedAuthorId));
+    await deleteAuthor(selectedAuthor!.id);
+    setAuthors(authors.filter((author) => author.id !== selectedAuthor!.id));
 
     setOpen(false);
+    toast.success(`Author(${selectedAuthor?.name}) is deleted`);
   }
 
   return (
@@ -54,7 +56,7 @@ export default function AuthorsPage() {
                 <Link href={`/authors/edit/${author.id}`} className="bg-yellow-500 text-white px-2 py-1 rounded mr-2">
                   Edit
                 </Link>
-                <button onClick={() => handleDelete(author.id)} className="bg-red-500 text-white px-2 py-1 rounded">
+                <button onClick={() => handleDelete(author)} className="bg-red-500 text-white px-2 py-1 rounded">
                   Delete
                 </button>
               </td>
@@ -65,7 +67,7 @@ export default function AuthorsPage() {
       <ConfirmDialog
         isOpen={open}
         handleClose={() => setOpen(false)}
-        confirmMsg="Are you sure to delete this Author"
+        confirmMsg={`Are you sure to delete this author (${selectedAuthor?.name})`}
         confirmRef={confirmRef}
         handleConfirm={confirmDelete}
       />

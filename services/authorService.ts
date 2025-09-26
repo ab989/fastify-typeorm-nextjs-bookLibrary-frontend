@@ -1,28 +1,26 @@
-import axios from 'axios';
-
-const BASE_URL = process.env.API_URL || 'http://localhost:3001';
+import api from './api';
 
 export const getAuthors = async () => {
-  const response = await axios.get(`${BASE_URL}/authors`);
+  const response = await api.get(`/authors`);
   return response.data;
 };
 
 export const getAuthor = async (id: string) => {
-  const response = await axios.get(`${BASE_URL}/authors/${id}`);
+  const response = await api.get(`/authors/${id}`);
   return response.data;
 };
 
 export const createAuthor = async (name: string) => {
-  const response = await axios.post(`${BASE_URL}/authors`, { name });
+  const response = await api.post(`/authors`, { name });
   return response.data;
 };
 
 export const updateAuthor = async (id: string, name: string) => {
-  const response = await axios.put(`${BASE_URL}/authors/${id}`, { name });
+  const response = await api.put(`/authors/${id}`, { name });
   return response.data;
 };
 
 export const deleteAuthor = async (id: string) => {
-  const response = await axios.delete(`${BASE_URL}/authors/${id}`);
+  const response = await api.delete(`/authors/${id}`);
   return response.data;
 };

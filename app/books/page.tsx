@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
+import toast from "react-hot-toast"
 
 import { Book } from '@/types/Book'
 import { getBooks, deleteBook } from '@/services/bookService';
@@ -10,7 +11,7 @@ import ConfirmDialog from '@/components/modal/ConfirmDialog';
 export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [open, setOpen] = useState(false);
-  const [selectedBookId, setSelectedBookId] = useState('');
+  const [selectedBook, setSelectedBook] = useState<Book>();
   const confirmRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
@@ -21,16 +22,17 @@ export default function BooksPage() {
     fetchBooks();
   }, []);
 
-  const handleDelete = (id: string) => {
-    setSelectedBookId(id);
+  const handleDelete = (book: Book) => {
+    setSelectedBook(book);
     setOpen(true);
   };
 
   const confirmDelete = async () => {
-    await deleteBook(selectedBookId);
-    setBooks(books.filter((book) => book.id !== selectedBookId));
+    await deleteBook(selectedBook!.id);
+    setBooks(books.filter((book) => book.id !== selectedBook!.id));
 
     setOpen(false);
+    toast.success(`Book(${selectedBook?.title}) is deleted`);
   }
 
   return (
@@ -56,7 +58,7 @@ export default function BooksPage() {
                 <Link href={`/books/edit/${book.id}`} className="bg-yellow-500 text-white px-2 py-1 rounded mr-2">
                   Edit
                 </Link>
-                <button onClick={() => handleDelete(book.id)} className="bg-red-500 text-white px-2 py-1 rounded">
+                <button onClick={() => handleDelete(book)} className="bg-red-500 text-white px-2 py-1 rounded">
                   Delete
                 </button>
               </td>
@@ -67,7 +69,7 @@ export default function BooksPage() {
       <ConfirmDialog
         isOpen={open}
         handleClose={() => setOpen(false)}
-        confirmMsg="Are you sure to delete this Book"
+        confirmMsg={`Are you sure to delete this book (${selectedBook?.title})`}
         confirmRef={confirmRef}
         handleConfirm={confirmDelete}
       />

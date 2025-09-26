@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import toast from "react-hot-toast"
+
 import { getBook, updateBook } from '@/services/bookService';
 import { getAuthors } from '@/services/authorService';
 import { useRouter, useParams } from 'next/navigation';
@@ -36,6 +38,8 @@ export default function EditBookPage() {
   const handleSubmit = async (values: BookFormValues) => {
     await updateBook(id, values.title, values.authorId);
     router.push('/books');
+
+    toast.success(`Book(${values.title}) is updated`);
   };
 
   return (
