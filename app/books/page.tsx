@@ -1,12 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getBooks, deleteBook } from '@/services/bookService';
+import { useEffect, useRef, useState } from 'react';
+
 import { Book } from '@/types/Book'
+import { getBooks, deleteBook } from '@/services/bookService';
+import ConfirmDialog from '@/components/modal/ConfirmDialog';
 
 export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
+  const [open, setOpen] = useState(false);
+  const [selectedBookId, setSelectedBookId] = useState('');
+  const confirmRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -16,10 +21,17 @@ export default function BooksPage() {
     fetchBooks();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    await deleteBook(id);
-    setBooks(books.filter((book) => book.id !== id));
+  const handleDelete = (id: string) => {
+    setSelectedBookId(id);
+    setOpen(true);
   };
+
+  const confirmDelete = async () => {
+    await deleteBook(selectedBookId);
+    setBooks(books.filter((book) => book.id !== selectedBookId));
+
+    setOpen(false);
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -52,6 +64,13 @@ export default function BooksPage() {
           ))}
         </tbody>
       </table>
+      <ConfirmDialog
+        isOpen={open}
+        handleClose={() => setOpen(false)}
+        confirmMsg="Are you sure to delete this Book"
+        confirmRef={confirmRef}
+        handleConfirm={confirmDelete}
+      />
     </div>
   );
 }

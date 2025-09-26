@@ -2,7 +2,7 @@
 
 import { createAuthor } from '@/services/authorService';
 import { useRouter } from 'next/navigation';
-import AuthorForm, { AuthorFormValues } from '@/components/AuthorForm';
+import AuthorForm, { AuthorFormValues } from '@/components/forms/AuthorForm';
 
 export default function NewAuthorPage() {
   const router = useRouter();

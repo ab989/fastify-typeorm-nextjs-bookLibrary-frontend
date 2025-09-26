@@ -5,7 +5,7 @@ import { getBook, updateBook } from '@/services/bookService';
 import { getAuthors } from '@/services/authorService';
 import { useRouter, useParams } from 'next/navigation';
 import { Author } from '@/types/Author';
-import BookForm, { BookFormValues } from '@/components/BookForm';
+import BookForm, { BookFormValues } from '@/components/forms/BookForm';
 
 export default function EditBookPage() {
   const [title, setTitle] = useState('');

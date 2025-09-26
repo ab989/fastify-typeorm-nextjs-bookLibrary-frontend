@@ -5,7 +5,7 @@ import { createBook } from '@/services/bookService';
 import { getAuthors } from '@/services/authorService';
 import { useRouter } from 'next/navigation';
 import { Author } from '@/types/Author';
-import BookForm, { BookFormValues } from '@/components/BookForm';
+import BookForm, { BookFormValues } from '@/components/forms/BookForm';
 
 export default function NewBookPage() {
   const [authors, setAuthors] = useState<Author[]>([]);

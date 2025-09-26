@@ -26,10 +26,21 @@ const BookForm: React.FC<BookFormProps> = ({
   authors
 }) => {
   const [values, setValues] = useState<BookFormValues>(initialValues);
-
+  const [errors, setErrors] = useState<{ title?: string; author?: string }>({});
+  
   useEffect(() => {
     setValues(initialValues);
   }, [initialValues]);
+
+  const validate = () => {
+    const newErrors: { title?: string; author?: string } = {};
+
+    if (!values.title.trim()) newErrors.title = "Book title is required.";
+    if (!values.authorId) newErrors.author = "Please select an author.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -40,7 +51,11 @@ const BookForm: React.FC<BookFormProps> = ({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
+    if (!validate()) return;
+    
     onSubmit(values);
+    setErrors({});
   };
 
   return (
@@ -57,6 +72,9 @@ const BookForm: React.FC<BookFormProps> = ({
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
+          {errors.title && (
+            <p className="mt-1 text-sm text-rose-600">{errors.title}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="author">
@@ -77,6 +95,9 @@ const BookForm: React.FC<BookFormProps> = ({
                 </option>
               ))}
             </select>
+          )}
+          {errors.author && (
+            <p className="mt-1 text-sm text-rose-600">{errors.author}</p>
           )}
         </div>
       <button

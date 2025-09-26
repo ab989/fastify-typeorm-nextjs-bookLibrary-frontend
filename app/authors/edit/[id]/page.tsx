@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getAuthor, updateAuthor } from '@/services/authorService';
 import { useRouter, useParams } from 'next/navigation';
-import AuthorForm, { AuthorFormValues } from '@/components/AuthorForm';
+import AuthorForm, { AuthorFormValues } from '@/components/forms/AuthorForm';
 
 export default function EditAuthorPage() {
   const [name, setName] = useState('');

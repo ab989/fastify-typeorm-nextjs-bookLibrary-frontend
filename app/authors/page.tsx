@@ -1,12 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getAuthors, deleteAuthor } from '@/services/authorService';
+import { useEffect, useRef, useState } from 'react';
+
 import { Author } from '@/types/Author';
+import { getAuthors, deleteAuthor } from '@/services/authorService';
+import ConfirmDialog from '@/components/modal/ConfirmDialog';
 
 export default function AuthorsPage() {
   const [authors, setAuthors] = useState<Author[]>([]);
+  const [open, setOpen] = useState(false);
+  const [selectedAuthorId, setSelectedAuthorId] = useState('');
+  const confirmRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     const fetchAuthors = async () => {
@@ -16,10 +21,17 @@ export default function AuthorsPage() {
     fetchAuthors();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    await deleteAuthor(id);
-    setAuthors(authors.filter((author) => author.id !== id));
+  const handleDelete = (id: string) => {
+    setSelectedAuthorId(id);
+    setOpen(true);
   };
+
+  const confirmDelete = async () => {
+    await deleteAuthor(selectedAuthorId);
+    setAuthors(authors.filter((author) => author.id !== selectedAuthorId));
+
+    setOpen(false);
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -50,6 +62,13 @@ export default function AuthorsPage() {
           ))}
         </tbody>
       </table>
+      <ConfirmDialog
+        isOpen={open}
+        handleClose={() => setOpen(false)}
+        confirmMsg="Are you sure to delete this Author"
+        confirmRef={confirmRef}
+        handleConfirm={confirmDelete}
+      />
     </div>
   );
 }

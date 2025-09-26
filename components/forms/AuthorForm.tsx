@@ -21,6 +21,7 @@ const AuthorForm: React.FC<AuthorFormProps> = ({
   submitLabel = "Save",
 }) => {
   const [values, setValues] = useState<AuthorFormValues>(initialValues);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setValues(initialValues);
@@ -35,6 +36,13 @@ const AuthorForm: React.FC<AuthorFormProps> = ({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
+    if (!values.name.trim()) {
+      setError("Author name is required.");
+      return;
+    }
+
+    setError("");
     onSubmit(values);
   };
 
@@ -52,6 +60,7 @@ const AuthorForm: React.FC<AuthorFormProps> = ({
           onChange={handleChange}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
+        {error && <p className="text-sm text-rose-600">{error}</p>}
       </div>
       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
         {submitLabel}
